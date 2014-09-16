@@ -1,0 +1,22 @@
+#!/bin/bash
+# Show a list of items that is NOT backed up by Time Machine by default settings
+# of the OS.
+
+# Check that this is being run as sudo/root
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root - issue sudo !! to run again as root" 1>&2
+   exit 1
+fi
+
+# Filename where we will write the data to
+FINISHED_FILE="Time_Machine_File_Exclusions.txt"
+
+# what time is it now
+echo $("date")
+echo "Exporting Apple's list of TimeMachine exclusions"
+echo "The file "$FINISHED_FILE" will be saved to the desktop, writing over any previously same named files."
+
+# Issue command to extract the list of fies that Time Machine is going to skip over...
+/usr/bin/mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'" > ~/Desktop/"$FINISHED_FILE";
+
+exit 0
